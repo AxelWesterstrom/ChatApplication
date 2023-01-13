@@ -11,6 +11,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import styles from "../../public/css/login.css";
+
 // import { useNavigate } from "react-router-dom";
 // import { useStates } from "../assets/helpers/states";
 
@@ -68,34 +69,27 @@ function LoginForm() {
 
   return (LoginForm = (
     <>
-      <Row>
-        <p>HELLO!</p>
-      </Row>
-      <Container className="loginform-body">
-        <Container className="login">
-          <Row className="form-row">
-            <Col className=" login-form-col">
-              <Form.Group className="login-form">
-                <Form autoComplete="off">
-                  <FormLabel className="login-label">E-postadress </FormLabel>
+      <Container className="login">
+        <Row className="form-row">
+          <Col className=" login-form-col">
+            <Form.Group className="login-form">
+              <Form autoComplete="off">
+                <Row>
+                  <FormLabel className="login-label">Username </FormLabel>
                   <FormControl type="email" />
-                  <FormLabel className="login-label">Lösenord </FormLabel>
+                </Row>
+                <Row>
+                  <FormLabel className="login-label">Password </FormLabel>
                   <FormControl type="password" />
-                  <Button
-                    type="submit"
-                    className="custom-button"
-                    style={{ marginTop: 20 }}
-                  >
-                    Logga in
-                  </Button>
-                  <Button className="custom-button" style={{ marginTop: 20 }}>
-                    Skapa ett konto
-                  </Button>
-                </Form>
-              </Form.Group>
-            </Col>
-          </Row>
-        </Container>
+                </Row>
+                <Button type="submit" className="login-button">
+                  Log in
+                </Button>
+                <Button className="login-button">Create an account</Button>
+              </Form>
+            </Form.Group>
+          </Col>
+        </Row>
       </Container>
     </>
   ));
