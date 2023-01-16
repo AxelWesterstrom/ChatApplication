@@ -1,5 +1,5 @@
 import React from "react";
-// import { useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Row,
@@ -8,64 +8,60 @@ import {
   Button,
   FormLabel,
   FormControl,
-  Modal,
 } from "react-bootstrap";
 import styles from "../../public/css/login.css";
-
-// import { useNavigate } from "react-router-dom";
-// import { useStates } from "../assets/helpers/states";
+import { useStates } from "../assets/states.js";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  // let log = useStates("login");
-  // let u = useStates("user");
-  // const navigate = useNavigate();
+  let log = useStates("login");
+  let u = useStates("user");
+  const navigate = useNavigate();
 
-  // let l = useStates({
-  //   email: "",
-  //   password: "",
-  // });
+  let l = useStates({
+    username: "",
+    password: "",
+  });
 
-  // const handleClose = () => setShow(false);
-  // const [errorMessage, setErrorMessage] = useState("");
+  const handleClose = () => setShow(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // function login(event) {
-  //   event.preventDefault();
-  //   loginAttempt();
-  // }
+  function login(event) {
+    event.preventDefault();
+    loginAttempt();
+  }
 
-  // async function loginAttempt() {
-  //   const customer = await (
-  //     await fetch(`/api/customers?email=${l.email}`)
-  //   ).json();
-  //   if (l.email.length === 0 || l.password.length === 0) {
-  //     setErrorMessage("Fyll i både email och lösenord  ");
-  //     setShow(true);
-  //   } else if (customer === 0) {
-  //     setErrorMessage("Fel e-post eller lösenord ");
-  //     setShow(true);
-  //   } else {
-  //     const customerInfo = Object.values(customer);
-  //     const correctPassword = customerInfo[0].password;
-  //     const customerId = customerInfo[0].id;
-  //     u.customerId = customerId;
-  //     if (correctPassword == l.password) {
-  //       setErrorMessage("Välkommen!");
-  //       setShow(true);
-  //       log.login = "true";
-  //       u.email = l.email;
-  //       u.showMessage = "login";
-  //       navigate("/");
-  //     } else {
-  //       setErrorMessage("Fel e-post eller lösenord  ");
-  //       setShow(true);
-  //     }
-  //   }
-  // }
+  async function loginAttempt() {
+    const user = await (await fetch(`/api/user?username=${l.username}`)).json();
+    if (l.username.length === 0 || l.password.length === 0) {
+      setErrorMessage("Fyll i både email och lösenord  ");
+      setShow(true);
+    } else if (user === 0) {
+      setErrorMessage("Fel e-post eller lösenord ");
+      setShow(true);
+    } else {
+      const userInfo = Object.values(user);
+      const correctPassword = userInfo[0].password;
+      const userId = userInfo[0].id;
+      u.userId = userId;
+      if (correctPassword == l.password) {
+        setErrorMessage("Välkommen!");
+        setShow(true);
+        log.login = "true";
+        u.email = l.email;
+        u.showMessage = "login";
+        navigate("/");
+      } else {
+        setErrorMessage("Fel e-post eller lösenord  ");
+        setShow(true);
+      }
+    }
+  }
 
-  // function goToRegister() {
-  //   navigate("/skapa-konto");
-  // }
-  // const [show, setShow] = useState();
+  function goToRegister() {
+    navigate("/create-account");
+  }
+  const [show, setShow] = useState();
 
   return (LoginForm = (
     <>
@@ -73,20 +69,33 @@ function LoginForm() {
         <Row className="form-row">
           <Col className=" login-form-col">
             <Form.Group className="login-form">
-              <Form autoComplete="off">
+              <Form onSubmit={login} autoComplete="off">
                 <Row>
                   <FormLabel className="login-label">Username </FormLabel>
-                  <FormControl type="email" />
+                  <FormControl type="email" {...l.bind("user")} />
                 </Row>
                 <Row>
                   <FormLabel className="login-label">Password </FormLabel>
-                  <FormControl type="password" />
+                  <FormControl type="password" {...l.bind("password")} />
                 </Row>
                 <Button type="submit" className="login-button">
                   Log in
                 </Button>
-                <Button className="login-button">Create an account</Button>
+                <Button className="login-button" onClick={goToRegister}>
+                  Create an account
+                </Button>
               </Form>
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton></Modal.Header>
+                <Modal.Body>
+                  <p className="custom-label">{errorMessage}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button className="custom-button" onClick={handleClose}>
+                    Stäng
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </Form.Group>
           </Col>
         </Row>
