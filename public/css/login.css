@@ -4,7 +4,6 @@
 
 .form-row {
   display: flex;
-  width: 40%;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -27,10 +26,4 @@
 
 .login-form .custom-button:nth-of-type(2n) {
   float: right;
-}
-
-@media screen and (min-width: 800px) {
-  .form-row {
-    max-width: 55%;
-  }
 }

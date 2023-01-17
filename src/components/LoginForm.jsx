@@ -8,6 +8,7 @@ import {
   Button,
   FormLabel,
   FormControl,
+  Modal,
 } from "react-bootstrap";
 import styles from "../../public/css/login.css";
 import { useStates } from "../assets/states.js";
@@ -67,21 +68,29 @@ function LoginForm() {
     <>
       <Container className="login">
         <Row className="form-row">
-          <Col className=" login-form-col">
+          <Col lg={6}>
             <Form.Group className="login-form">
               <Form onSubmit={login} autoComplete="off">
                 <Row>
                   <FormLabel className="login-label">Username </FormLabel>
-                  <FormControl type="email" {...l.bind("user")} />
+                  <FormControl
+                    type="text"
+                    autoComplete="username"
+                    {...l.bind("user")}
+                  />
                 </Row>
                 <Row>
                   <FormLabel className="login-label">Password </FormLabel>
-                  <FormControl type="password" {...l.bind("password")} />
+                  <FormControl
+                    type="password"
+                    {...l.bind("password")}
+                    autoComplete="current-password"
+                  />
                 </Row>
-                <Button type="submit" className="login-button">
+                <Button type="submit" className="custom-button">
                   Log in
                 </Button>
-                <Button className="login-button" onClick={goToRegister}>
+                <Button className="custom-button" onClick={goToRegister}>
                   Create an account
                 </Button>
               </Form>
