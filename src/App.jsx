@@ -3,7 +3,7 @@ import Home from "./pages/Home.jsx";
 
 import { useStates } from "./assets/states.js";
 import Register from "./pages/Register.jsx";
-import styles from "../public/css/commonStyles.css";
+import "../public/css/commonStyles.css";
 
 function App() {
   let user = useStates("user", {

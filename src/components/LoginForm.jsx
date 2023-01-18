@@ -1,18 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  FormLabel,
-  FormControl,
-  Modal,
-} from "react-bootstrap";
-import styles from "../../public/css/login.css";
+import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
+import "../../public/css/login.css";
 import { useStates } from "../assets/states.js";
 import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function LoginForm() {
   let log = useStates("login");
@@ -66,48 +58,48 @@ function LoginForm() {
 
   return (LoginForm = (
     <>
-      <Container className="login">
-        <Row className="form-row">
-          <Col lg={6}>
-            <Form.Group className="login-form">
-              <Form onSubmit={login} autoComplete="off">
-                <Row>
-                  <FormLabel className="login-label">Username </FormLabel>
-                  <FormControl
+      <Container className="d-flex justify-content-center align-items-center">
+        <Row className="login-form">
+          <Form.Group>
+            <Form onSubmit={login} autoComplete="off">
+              <Col md>
+                <Form.Group controlId="formUsername">
+                  <Form.Label>Username </Form.Label>
+                  <Form.Control
                     type="text"
                     autoComplete="username"
+                    placeholder="Username"
                     {...l.bind("user")}
                   />
-                </Row>
-                <Row>
-                  <FormLabel className="login-label">Password </FormLabel>
-                  <FormControl
-                    type="password"
-                    {...l.bind("password")}
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formPassword">
+                  <Form.Label>Username </Form.Label>
+                  <Form.Control
+                    type="text"
                     autoComplete="current-password"
+                    placeholder="Password"
+                    {...l.bind("password")}
                   />
-                </Row>
-                <Button type="submit" className="custom-button">
-                  Log in
-                </Button>
-                <Button className="custom-button" onClick={goToRegister}>
-                  Create an account
-                </Button>
-              </Form>
-              <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton></Modal.Header>
-                <Modal.Body>
-                  <p className="custom-label">{errorMessage}</p>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button className="custom-button" onClick={handleClose}>
-                    Stäng
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </Form.Group>
-          </Col>
+                </Form.Group>
+              </Col>
+              <Button type="submit">Log in</Button>
+              <Button onClick={goToRegister}>Create an account</Button>
+            </Form>
+          </Form.Group>
         </Row>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton></Modal.Header>
+          <Modal.Body>
+            <p className="custom-label">{errorMessage}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="custom-button" onClick={handleClose}>
+              Stäng
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </>
   ));
