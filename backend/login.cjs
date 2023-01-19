@@ -40,7 +40,7 @@ module.exports = function (app, db) {
     }
     req.body[passwordField] = passwordEncryptor(req.body[passwordField]);
     let stmt = db.prepare(`
-      SELECT * FROM user
+      SELECT * FROM users
       WHERE username = :username AND password = :password
     `);
     let result = stmt.all(req.body)[0] || { _error: "No such user." };

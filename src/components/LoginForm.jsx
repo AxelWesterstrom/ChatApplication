@@ -24,41 +24,40 @@ function LoginForm() {
     password: "",
   });
 
-  const handleClose = () => setShow(false);
+  function handleClose() {
+    setShow(false);
+    if (u.username !== "") {
+      window.location.reload(false);
+    }
+  }
+
   const [errorMessage, setErrorMessage] = useState("");
 
   async function loginAttempt(event) {
     event.preventDefault();
 
     if (l.username.length === 0 || l.password.length === 0) {
-      setErrorMessage("Fyll i både email och lösenord  ");
+      setErrorMessage("Enter both username and password");
       setShow(true);
       return;
     }
 
     let user = await (
       await fetch("/api/login", {
-        method: "POST", //This could be any http method
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: l.username, password: l.password }),
       })
     ).json();
 
     if (user._error) {
-      setErrorMessage("Fel e-post eller lösenord ");
+      setErrorMessage("Wrong username or password");
       setShow(true);
     } else {
-      setErrorMessage("Välkommen!");
+      setErrorMessage("Welcome!");
       setShow(true);
       log.login = "true";
       Object.assign(u, user);
-
-      // Would be simpler if we had the same casing on backend and frontend... but for now...
-      u.userName = u.username;
-      delete u.username;
-
-      //u.showMessage = "login";
-      // navigate("/");
     }
   }
 

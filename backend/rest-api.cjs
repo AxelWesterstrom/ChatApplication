@@ -1,7 +1,7 @@
 const passwordEncryptor = require("./passwordEncryptor.cjs");
 const acl = require("./acl.cjs");
 const specialRestRoutes = require("./special-rest-routes.cjs");
-const userTable = "user";
+const userTable = "users";
 const passwordField = "password";
 const userRoleField = "userRole";
 
@@ -101,8 +101,7 @@ module.exports = function setupRESTapi(app, databaseConnection) {
       delete req.body.id;
 
       if (name === userTable) {
-        // req.body[userRoleField] = "user";
-        req.body["admin"] = 0;
+        req.body[userRoleField] = "user";
         req.body[passwordField] = passwordEncryptor(req.body[passwordField]);
       }
 
