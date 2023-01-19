@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Ignore db (but not the db template)
-/backend/database/Chat.db
+Chat.db
