@@ -6,154 +6,157 @@ import {
   Col,
   Form,
   Button,
-  FormLabel,
-  FormControl,
   Modal,
+  ButtonGroup,
 } from "react-bootstrap";
-//import "./css/login.css";
-import { useNavigate } from "react-router-dom";
+import "../css/login.css";
 import { useStates } from "../assets/states.js";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-function RegisterForm() {
+function Register() {
   const navigate = useNavigate();
   let log = useStates("login");
   let u = useStates("user");
-
   let l = useStates({
-    firstName: "",
-    lastName: "",
-    email: "",
+    username: "",
     password: "",
     passwordCheck: "",
   });
-
-  let customerToRegister = {
-    email: l.email,
-    password: l.password,
-    personId: 0,
-  };
-  let personToRegister = { firstName: l.firstName, lastName: l.lastName };
 
   const handleClose = () => setShow(false);
   const [show, setShow] = useState();
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  function register(event) {
+  async function registerAttempt(event) {
     event.preventDefault();
-    registerAttempt();
-  }
-
-  async function registerAttempt() {
-    let email = await (await fetch(`/api/customers?email=${l.email}`)).json();
     if (
-      l.email.length == 0 ||
+      l.username.length == 0 ||
       l.password.length == 0 ||
-      l.passwordCheck.length == 0 ||
-      l.lastName == 0 ||
-      l.firstName == 0
+      l.passwordCheck.length == 0
     ) {
-      setErrorMessage("Alla fält måste fyllas i");
+      setErrorMessage("All fields must be entered");
       setShow(true);
-    } else if (email.length !== 0) {
-      setErrorMessage("E-postadressen används redan");
-      setShow(true);
-    } else if (email.length == 0 && l.password !== l.passwordCheck) {
+      return;
+    } else if (l.password !== l.passwordCheck) {
       setErrorMessage("Lösenorden matchade inte");
       setShow(true);
-    } else if (email.length == 0 && l.password == l.passwordCheck) {
-      setErrorMessage("Grattis! Du skapade ett konto, välkommen");
+      return;
+    }
+
+    let user = await (
+      await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: l.username,
+          password: l.password,
+          userRole: "user",
+        }),
+      })
+    ).json();
+
+    if (
+      user._error === "SqliteError: UNIQUE constraint failed: users.username"
+    ) {
+      setErrorMessage("Username already in use");
       setShow(true);
-      addUser();
+    } else {
+      // Registration successful now log in the user automatically
+      let user = await (
+        await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: l.username,
+            password: l.password,
+          }),
+        })
+      ).json();
+
+      if (user._error) {
+        setErrorMessage("Wrong username or password");
+        setShow(true);
+      } else {
+        log.login = "true";
+        Object.assign(u, user);
+      }
+      navigate("/");
     }
   }
 
-  async function addToDatabase() {
-    let { insertId } = await (
-      await fetch(`/api/people`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(personToRegister),
-      })
-    ).json();
-    customerToRegister.personId = insertId;
-
-    let { insertId: customerId } = await (
-      await fetch(`/api/customers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customerToRegister),
-      })
-    ).json();
-    u.customerId = customerId;
-  }
-
-  function addUser() {
-    log.login = "true";
-    u.email = l.email;
-    u.showMessage = "register";
-    addToDatabase();
+  function goToLogin() {
     navigate("/");
   }
 
-  return (RegisterForm = (
+  return (Register = (
     <>
-      <div className="login-body">
-        <div className="header">
-          <Header />
-        </div>
-        <div>
-          <Container className="loginform-body">
-            <Container className="login">
-              <Row className="form-row">
-                <Col className=" login-form-col">
-                  <Form.Group className="login-form">
-                    <Form onSubmit={register} autoComplete="off">
-                      <FormLabel className="login-label">Förnamn </FormLabel>
-                      <FormControl type="text" {...l.bind("firstName")} />
-                      <FormLabel className="login-label">Efternamn </FormLabel>
-                      <FormControl type="text" {...l.bind("lastName")} />
-                      <FormLabel className="login-label">
-                        E-postadress{" "}
-                      </FormLabel>
-                      <FormControl type="email" {...l.bind("email")} />
-                      <FormLabel className="login-label">Lösenord </FormLabel>
-                      <FormControl type="password" {...l.bind("password")} />
-                      <FormLabel className="login-label">
-                        Bekräfta lösenord{" "}
-                      </FormLabel>
-                      <FormControl
-                        type="password"
-                        {...l.bind("passwordCheck")}
-                      />
-                      <Button
-                        type="submit"
-                        className="custom-button"
-                        style={{ marginTop: 20 }}
-                      >
-                        Skapa konto
-                      </Button>
-                    </Form>
-                    <Modal show={show} onHide={handleClose}>
-                      <Modal.Header closeButton></Modal.Header>
-                      <Modal.Body>
-                        <p className="custom-label">{errorMessage}</p>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button className="custom-button" onClick={handleClose}>
-                          Stäng
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Container>
-          </Container>
-        </div>
-      </div>
+      <Container className="d-flex justify-content-center align-items-center">
+        <Row className="rounded mg-10">
+          <Form.Group>
+            <Form
+              className="rounded p-4 p-sm-3"
+              onSubmit={registerAttempt}
+              autoComplete="off"
+            >
+              <Col md>
+                <Form.Group controlId="formUsername">
+                  <Form.Label>Username </Form.Label>
+                  <Form.Control
+                    type="text"
+                    autoComplete="username"
+                    placeholder="Username"
+                    {...l.bind("username")}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="Password"
+                    {...l.bind("password")}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formConfirmPassword">
+                  <Form.Label>Confirm password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="Password"
+                    {...l.bind("passwordCheck")}
+                  />
+                </Form.Group>
+              </Col>
+              <ButtonGroup
+                vertical
+                className="d-flex justify-content-center align-items-center"
+              >
+                &nbsp;<Button type="submit">Register</Button> &nbsp;
+                <Button onClick={goToLogin}>Cancel</Button>
+              </ButtonGroup>
+            </Form>
+          </Form.Group>
+        </Row>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton></Modal.Header>
+          <Modal.Body>
+            <p className="custom-label">{errorMessage}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="custom-button" onClick={handleClose}>
+              Stäng
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
     </>
   ));
 }
 
-export default RegisterForm;
+export default Register;
