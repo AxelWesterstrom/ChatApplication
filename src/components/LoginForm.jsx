@@ -61,7 +61,11 @@ function LoginForm() {
       <Container className="d-flex justify-content-center align-items-center">
         <Row className="login-form">
           <Form.Group>
-            <Form onSubmit={login} autoComplete="off">
+            <Form
+              className="rounded p-4 p-sm-3"
+              onSubmit={login}
+              autoComplete="off"
+            >
               <Col md>
                 <Form.Group controlId="formUsername">
                   <Form.Label>Username </Form.Label>
@@ -75,7 +79,7 @@ function LoginForm() {
               </Col>
               <Col>
                 <Form.Group controlId="formPassword">
-                  <Form.Label>Username </Form.Label>
+                  <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="text"
                     autoComplete="current-password"
