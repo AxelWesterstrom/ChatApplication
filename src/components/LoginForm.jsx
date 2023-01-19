@@ -1,7 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import { Container, Row, Col, Form, Button, Modal } from "react-bootstrap";
-import "../../public/css/login.css";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Modal,
+  ButtonGroup,
+} from "react-bootstrap";
+import "../css/login.css";
 import { useStates } from "../assets/states.js";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,35 +27,38 @@ function LoginForm() {
   const handleClose = () => setShow(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  function login(event) {
+  async function loginAttempt(event) {
     event.preventDefault();
-    loginAttempt();
-  }
 
-  async function loginAttempt() {
-    const user = await (await fetch(`/api/user?username=${l.username}`)).json();
     if (l.username.length === 0 || l.password.length === 0) {
       setErrorMessage("Fyll i både email och lösenord  ");
       setShow(true);
-    } else if (user === 0) {
+      return;
+    }
+
+    let user = await (
+      await fetch("/api/login", {
+        method: "POST", //This could be any http method
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: l.username, password: l.password }),
+      })
+    ).json();
+
+    if (user._error) {
       setErrorMessage("Fel e-post eller lösenord ");
       setShow(true);
     } else {
-      const userInfo = Object.values(user);
-      const correctPassword = userInfo[0].password;
-      const userId = userInfo[0].id;
-      u.userId = userId;
-      if (correctPassword == l.password) {
-        setErrorMessage("Välkommen!");
-        setShow(true);
-        log.login = "true";
-        u.email = l.email;
-        u.showMessage = "login";
-        navigate("/");
-      } else {
-        setErrorMessage("Fel e-post eller lösenord  ");
-        setShow(true);
-      }
+      setErrorMessage("Välkommen!");
+      setShow(true);
+      log.login = "true";
+      Object.assign(u, user);
+
+      // Would be simpler if we had the same casing on backend and frontend... but for now...
+      u.userName = u.username;
+      delete u.username;
+
+      //u.showMessage = "login";
+      // navigate("/");
     }
   }
 
@@ -59,11 +70,11 @@ function LoginForm() {
   return (LoginForm = (
     <>
       <Container className="d-flex justify-content-center align-items-center">
-        <Row className="login-form">
+        <Row className="rounded mg-10">
           <Form.Group>
             <Form
               className="rounded p-4 p-sm-3"
-              onSubmit={login}
+              onSubmit={loginAttempt}
               autoComplete="off"
             >
               <Col md>
@@ -73,7 +84,7 @@ function LoginForm() {
                     type="text"
                     autoComplete="username"
                     placeholder="Username"
-                    {...l.bind("user")}
+                    {...l.bind("username")}
                   />
                 </Form.Group>
               </Col>
@@ -81,15 +92,20 @@ function LoginForm() {
                 <Form.Group controlId="formPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="password"
                     autoComplete="current-password"
                     placeholder="Password"
                     {...l.bind("password")}
                   />
                 </Form.Group>
               </Col>
-              <Button type="submit">Log in</Button>
-              <Button onClick={goToRegister}>Create an account</Button>
+              <ButtonGroup
+                vertical
+                className="d-flex justify-content-center align-items-center"
+              >
+                &nbsp;<Button type="submit">Log in</Button> &nbsp;
+                <Button onClick={goToRegister}>Create an account</Button>
+              </ButtonGroup>
             </Form>
           </Form.Group>
         </Row>

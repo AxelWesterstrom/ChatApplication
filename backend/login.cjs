@@ -1,7 +1,7 @@
 const session = require("express-session");
 const store = require("better-express-store");
-const acl = require("./acl");
-const passwordEncryptor = require("./passwordEncryptor");
+const acl = require("./acl.cjs");
+const passwordEncryptor = require("./passwordEncryptor.cjs");
 const passwordField = "password";
 
 // salt for cookie hash generation

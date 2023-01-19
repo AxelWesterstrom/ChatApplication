@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginForm from "../components/LoginForm.jsx";
+import { useStates } from "../assets/states.js";
 
 function Home() {
+  const u = useStates("user");
+
+  async function logout() {
+    let result = await (await fetch("/api/login", { method: "DELETE" })).json();
+    u.username = "";
+    u.password = "";
+  }
+
   return (
-    <div className="App">
-      <LoginForm />
+    <div style={{ color: "#fff" }} className="App">
+      Hej! Detta får man bara se om man är inloggad!
+      <button onClick={logout}>Logga ut</button>
     </div>
   );
 }
