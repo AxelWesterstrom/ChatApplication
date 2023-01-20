@@ -54,8 +54,6 @@ function LoginForm() {
       setErrorMessage("Wrong username or password");
       setShow(true);
     } else {
-      setErrorMessage("Welcome!");
-      setShow(true);
       log.login = "true";
       Object.assign(u, user);
     }
