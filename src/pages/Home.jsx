@@ -1,4 +1,6 @@
 import { useStates } from "../assets/states.js";
+import { Container, Row, Col } from "react-bootstrap";
+import ChatSidebar from "../components/ChatSidebar";
 
 function Home() {
   const u = useStates("user");
@@ -11,8 +13,17 @@ function Home() {
 
   return (
     <div style={{ color: "#fff" }} className="App">
-      Hej! Detta får man bara se om man är inloggad!
-      <button onClick={logout}>Logga ut</button>
+      <Container fluid>
+        <Row>
+          <Col style={{ paddingLeft: 0 }} xs={2} id="sidebar-wrapper">
+            <ChatSidebar />
+          </Col>
+          <Col xs={10} id="page-content-wrapper">
+            this is a test
+            <button onClick={logout}>Logga ut</button>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
