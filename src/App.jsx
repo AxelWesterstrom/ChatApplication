@@ -13,7 +13,6 @@ function App() {
     role: "",
   });
 
-  console.log(user, "user");
   let log = useStates("login", {
     login: false,
   });

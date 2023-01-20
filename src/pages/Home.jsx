@@ -1,6 +1,7 @@
 import { useStates } from "../assets/states.js";
 import { Container, Row, Col } from "react-bootstrap";
 import ChatSidebar from "../components/ChatSidebar";
+import RightSidebar from "../components/RightSidebar.jsx";
 
 function Home() {
   const u = useStates("user");
@@ -15,12 +16,14 @@ function Home() {
     <div style={{ color: "#fff" }} className="App">
       <Container fluid>
         <Row>
-          <Col style={{ paddingLeft: 0 }} xs={2} id="sidebar-wrapper">
+          <Col style={{ paddingLeft: 0 }} xs={2}>
             <ChatSidebar />
           </Col>
-          <Col xs={10} id="page-content-wrapper">
+          <Col xs={8} id="page-content-wrapper">
             this is a test
-            <button onClick={logout}>Logga ut</button>
+          </Col>
+          <Col style={{ paddingRight: 0 }} xs={2}>
+            <RightSidebar />
           </Col>
         </Row>
       </Container>
