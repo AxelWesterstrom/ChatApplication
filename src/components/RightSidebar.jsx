@@ -6,8 +6,18 @@ import "../css/chatSidebar.css";
 function RightSidebar() {
   const u = useStates("user");
 
+  console.log(u.id);
   async function logout() {
     let result = await (await fetch("/api/login", { method: "DELETE" })).json();
+    await (
+      await fetch(`/api/users/${u.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          loggedIn: 0,
+        }),
+      })
+    ).json();
     u.username = "";
     u.password = "";
   }

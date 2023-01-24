@@ -53,6 +53,7 @@ function Register() {
           username: l.username,
           password: l.password,
           userRole: "user",
+          loggedIn: 1,
         }),
       })
     ).json();

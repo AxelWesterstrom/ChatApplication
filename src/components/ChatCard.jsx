@@ -1,17 +1,23 @@
 import { Col } from "react-bootstrap";
 import avatar from "../assets/avatar.svg";
 import "../css/chatCard.css";
+import UserCard from "./UserCard";
+import { useEffect } from "react";
 
-function ChatCard() {
+function ChatCard(user) {
+  /*function typeOutUser() {
+    for (let i = 0; i < 5; i++) {
+      <UserCard interval={i} key={i} />;
+    }
+  }*/
+
+  function inviteUser() {
+    alert("Inviting the user" + JSON.stringify(user, "", "  "));
+  }
+
   return (ChatCard = (
     <>
-      <Col> User 1</Col>
-      <hr />
-      <Col> User 2</Col>
-      <hr />
-      <Col> User 3</Col>
-      <hr />
-      <Col> User 4</Col>
+      <Col onClick={() => inviteUser(user)}> {user.username}</Col>
       <hr />
     </>
   ));

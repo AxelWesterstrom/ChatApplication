@@ -8,9 +8,15 @@ import "./css/commonStyles.css";
 
 function App() {
   let user = useStates("user", {
+    id: "",
     username: "",
     password: "",
     role: "",
+    loggedIn: "",
+  });
+
+  let online = useStates("online", {
+    users: [],
   });
 
   let log = useStates("login", {

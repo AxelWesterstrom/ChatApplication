@@ -46,16 +46,34 @@ function LoginForm() {
       await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: l.username, password: l.password }),
+        body: JSON.stringify({
+          username: l.username,
+          password: l.password,
+        }),
       })
     ).json();
+
+    let currentUser = await (
+      await fetch(`/api/users?username=${user.username}`)
+    ).json();
+
+    console.log(currentUser[0].username);
 
     if (user._error) {
       setErrorMessage("Wrong username or password");
       setShow(true);
     } else {
+      await (
+        await fetch(`/api/users/${currentUser[0].id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            loggedIn: 1,
+          }),
+        })
+      ).json();
       log.login = "true";
-      Object.assign(u, user);
+      Object.assign(u, currentUser[0]);
     }
   }
 

@@ -2,8 +2,22 @@ import React from "react";
 import { Accordion, Container } from "react-bootstrap";
 import "../css/chatSidebar.css";
 import ChatCard from "./ChatCard";
+import { useEffect } from "react";
+import { useStates } from "../assets/states";
 
 function ChatSidebar() {
+  let online = useStates("online");
+
+  useEffect(() => {
+    getLoggedInUsers();
+  }, []);
+
+  console.log(online.users);
+
+  async function getLoggedInUsers() {
+    online.users = await (await fetch(`/api/online-users`)).json();
+  }
+
   return (ChatSidebar = (
     <>
       <Container className="justify-content-sm-start">
@@ -11,7 +25,9 @@ function ChatSidebar() {
           <Accordion.Item eventKey="0">
             <Accordion.Header>Online</Accordion.Header>
             <Accordion.Body>
-              <ChatCard></ChatCard>
+              {online.users.map((user) => (
+                <ChatCard key={user.id} {...user} />
+              ))}
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="1">

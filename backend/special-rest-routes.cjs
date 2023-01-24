@@ -1,6 +1,18 @@
 const passwordEncryptor = require("./passwordEncryptor.cjs");
 
 module.exports = function (app, runQuery, db) {
+  app.get("/api/online-users", (req, res) => {
+    runQuery(
+      "online-users",
+      req,
+      res,
+      {},
+      `
+      SELECT id, username FROM users WHERE loggedIn = 1
+    `
+    );
+  });
+
   app.get("/api/my-orders", (req, res) => {
     let userId = req.session.user?.id;
 
