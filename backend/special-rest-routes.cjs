@@ -13,16 +13,26 @@ module.exports = function (app, runQuery, db) {
     );
   });
 
-  app.get("/api/my-orders", (req, res) => {
-    let userId = req.session.user?.id;
-
+  app.get("/api/my-chatrooms", (req, res) => {
     runQuery(
-      "my-orders",
+      "my-chat-room",
       req,
       res,
-      { customerId: userId },
+      { userId: req.session.user.id },
       `
-      SELECT * FROM orderDetails WHERE customerId = :customerId
+      SELECT * FROM chatMembers WHERE userId = :userId
+    `
+    );
+  });
+
+  app.get("/api/my-invitations", (req, res) => {
+    runQuery(
+      "my-chat-room",
+      req,
+      res,
+      { userId: req.session.user.id },
+      `
+      SELECT * FROM allPendingInvitations WHERE userId = :userId
     `
     );
   });
