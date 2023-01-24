@@ -18,6 +18,9 @@
     }
   },
   "user": {
+    "online-users": {
+      "get": true
+    },
     "authors": {
       "get": true
     },
@@ -39,6 +42,9 @@
     }
   },
   "superadmin": {
+    "online-users": {
+      "get": true
+    },
     "authors": {
       "get": true,
       "post": true,

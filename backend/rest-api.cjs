@@ -66,16 +66,22 @@ module.exports = function setupRESTapi(app, databaseConnection) {
 
   for (let { name, type } of tablesAndViews) {
     app.get("/api/" + name, (req, res) => {
-      runQuery(
-        name,
-        req,
-        res,
-        {},
-        `
+      let sql = `
         SELECT *
         FROM ${name}
-      `
-      );
+      `;
+
+      // build FROM according to query
+      let where = "";
+      for (let key of Object.keys(req.query)) {
+        where += key + " = :" + key;
+      }
+
+      if (where !== "") {
+        sql += " WHERE " + where;
+      }
+
+      runQuery(name, req, res, req.query, sql);
     });
 
     app.get("/api/" + name + "/:id", (req, res) => {
