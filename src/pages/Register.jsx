@@ -40,7 +40,7 @@ function Register() {
       setShow(true);
       return;
     } else if (l.password !== l.passwordCheck) {
-      setErrorMessage("Lösenorden matchade inte");
+      setErrorMessage("The passwords did not match");
       setShow(true);
       return;
     }
