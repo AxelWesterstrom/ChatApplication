@@ -19,6 +19,7 @@ function ChatSidebar() {
   let chatRooms = useStates("chatRooms");
   let chatRoom = useStates("chatRoom");
   let u = useStates("user");
+  let myRooms = useStates("myChatRooms");
 
   const [show, setShow] = React.useState(false);
   const handleOpen = () => setShow(true);
@@ -28,10 +29,15 @@ function ChatSidebar() {
     if (u.id === "") {
       getUserInfo();
     }
-    console.log(u);
     getLoggedInUsers();
     getChatRooms();
+    getMyCreatedChatRooms();
   }, []);
+
+  async function getMyCreatedChatRooms() {
+    myRooms.rooms = await (await fetch(`/api/chatroom-owner`)).json();
+    // Object.assign(myRooms, rooms);
+  }
 
   async function getUserInfo() {
     let currentUser = await (

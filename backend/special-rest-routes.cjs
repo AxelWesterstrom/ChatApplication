@@ -37,6 +37,18 @@ module.exports = function (app, runQuery, db) {
     );
   });
 
+  app.get("/api/chatroom-owner", (req, res) => {
+    runQuery(
+      "my-chat-room",
+      req,
+      res,
+      { userId: req.session.user.id },
+      `
+      SELECT * FROM chatRoomOwners WHERE ownerId = :userId
+    `
+    );
+  });
+
   app.get("/api/my-invitations", (req, res) => {
     runQuery(
       "my-chat-room",

@@ -1,4 +1,4 @@
-import { Col } from "react-bootstrap";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
 import "../css/chatCard.css";
 
 function ChatRoomCard(room) {
@@ -8,8 +8,12 @@ function ChatRoomCard(room) {
 
   return (ChatRoomCard = (
     <>
-      <Col onClick={() => inviteUser(room)}> {room.chatRoomName}</Col>
-      <hr />
+    <ListGroup>
+      <ListGroupItem onClick={() => inviteUser(room)}>
+        {" "}
+        {room.chatRoomName}
+      </ListGroupItem>
+      </ListGroup>
     </>
   ));
 }

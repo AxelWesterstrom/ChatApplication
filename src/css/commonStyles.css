@@ -10,4 +10,19 @@
   background-color: #1b262c;
   background-color: cutom-color;
   border-color: #1b262c;
+  cursor: pointer;
+}
+
+.list-group-item {
+  color: white;
+  background-color: #164f58;
+  margin-bottom: 3px;
+}
+.list-group-item:hover {
+  color: white;
+  background-color: #1b262c;
+  cursor: pointer;
+}
+.modal-content {
+  background-color: #48aa7d;
 }
