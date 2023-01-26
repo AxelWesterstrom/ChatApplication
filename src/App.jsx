@@ -19,6 +19,14 @@ function App() {
     users: [],
   });
 
+  let chatRooms = useStates("chatRooms", {
+    rooms: [],
+  });
+
+  let chatRoom = useStates("chatRoom", {
+    name: "",
+  });
+
   let log = useStates("login", {
     login: false,
   });

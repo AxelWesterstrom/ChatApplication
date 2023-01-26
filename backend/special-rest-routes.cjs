@@ -25,6 +25,18 @@ module.exports = function (app, runQuery, db) {
     );
   });
 
+  app.get("/api/current-user", (req, res) => {
+    runQuery(
+      "my-chat-room",
+      req,
+      res,
+      { userId: req.session.user.id },
+      `
+      SELECT id, username, userRole FROM users WHERE id = :userId
+    `
+    );
+  });
+
   app.get("/api/my-invitations", (req, res) => {
     runQuery(
       "my-chat-room",

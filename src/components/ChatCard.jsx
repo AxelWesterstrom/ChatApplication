@@ -1,7 +1,5 @@
 import { Col } from "react-bootstrap";
-import avatar from "../assets/avatar.svg";
 import "../css/chatCard.css";
-import { useEffect } from "react";
 
 function ChatCard(user) {
   function inviteUser() {

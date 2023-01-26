@@ -57,8 +57,6 @@ function LoginForm() {
       await fetch(`/api/users?username=${user.username}`)
     ).json();
 
-    console.log(currentUser[0].username);
-
     if (user._error) {
       setErrorMessage("Wrong username or password");
       setShow(true);
@@ -88,6 +86,7 @@ function LoginForm() {
         <Row className="rounded mg-10">
           <Form.Group>
             <Form
+              id="login-form"
               className="rounded p-4 p-sm-3"
               onSubmit={loginAttempt}
               autoComplete="off"
