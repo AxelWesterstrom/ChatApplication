@@ -23,6 +23,10 @@ function App() {
     rooms: [],
   });
 
+  let myChatRooms = useStates("myChatRooms", {
+    rooms: [],
+  });
+
   let chatRoom = useStates("chatRoom", {
     name: "",
   });
